@@ -1,5 +1,6 @@
-package jpabook.jpashop;
+package jpabook.jpashop.repository;
 
+import jpabook.jpashop.domain.Member;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,7 +22,7 @@ public class MemberRepository {
     }
 
     public Member findByUsername(String username) {
-        return em.createQuery("select m from Member m where m.username = :username", Member.class)
+        return em.createQuery("select m from Member m where m.name = :username", Member.class)
                 .setParameter("username", username)
                 .getSingleResult();
     }
