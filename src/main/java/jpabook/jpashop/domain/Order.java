@@ -1,5 +1,7 @@
 package jpabook.jpashop.domain;
 
+import jpabook.jpashop.exception.OrderCancelException;
+import jpabook.jpashop.model.DeliveryStatus;
 import jpabook.jpashop.model.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +46,7 @@ public class Order {
     @Enumerated(STRING)
     private OrderStatus status;
 
-    public void setMember(Member member) {
+    public void changeMember(Member member) {
         member.getOrders().add(this);
         this.member = member;
     }
@@ -54,9 +56,49 @@ public class Order {
         orderItem.changeOrder(this);
     }
 
-    public void setDelivery(Delivery delivery) {
+    public void changeDelivery(Delivery delivery) {
         delivery.changeOrder(this);
         this.delivery = delivery;
+    }
+
+    public void changeStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    // 생성 메서드
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = Order.builder()
+                .member(member)
+                .delivery(delivery)
+                .status(OrderStatus.ORDER)
+                .orderDate(LocalDateTime.now())
+                .build();
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        return order;
+    }
+
+    /*
+    비즈니스 로직
+     */
+
+    // 주문 취소
+    public void cancel() {
+        if(delivery.getStatus() == DeliveryStatus.DELIVERED) {
+            throw new OrderCancelException("배송완료된 상품은 취소할 수 없습니다.");
+        }
+        changeStatus(OrderStatus.CANCEL);
+        orderItems.forEach(OrderItem::cancel);
+    }
+
+    /*
+    조회 로직
+     */
+
+    // 전체 주문 가격 조회
+    public int getTotalPrice() {
+        return getOrderItems().stream().mapToInt(OrderItem::getTotalPrice).sum();
     }
 
 }
