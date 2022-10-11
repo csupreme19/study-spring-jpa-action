@@ -1,10 +1,12 @@
 package jpabook.jpashop.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookForm {
 
     private Long id;
