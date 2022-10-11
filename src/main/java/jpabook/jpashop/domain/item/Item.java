@@ -5,6 +5,7 @@ import jpabook.jpashop.exception.StockNotEnoughException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Setter
 @Inheritance
 @SuperBuilder
 @NoArgsConstructor(access = PROTECTED)

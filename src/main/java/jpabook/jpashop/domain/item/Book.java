@@ -2,6 +2,7 @@ package jpabook.jpashop.domain.item;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.DiscriminatorValue;
@@ -13,6 +14,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Setter
 @SuperBuilder
 @DiscriminatorValue("B")
 @NoArgsConstructor(access = PROTECTED)
