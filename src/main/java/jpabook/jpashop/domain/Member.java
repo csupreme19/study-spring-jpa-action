@@ -28,6 +28,7 @@ public class Member {
     private Address address;
 
     @OneToMany(mappedBy = "member")
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 
     public void changeName(String name) {

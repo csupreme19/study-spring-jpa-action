@@ -2,6 +2,7 @@ package jpabook.jpashop.domain.item;
 
 import jpabook.jpashop.domain.Category;
 import jpabook.jpashop.exception.StockNotEnoughException;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -29,6 +30,7 @@ public abstract class Item {
     private int stockQuantity;
 
     @ManyToMany(mappedBy = "items")
+    @Builder.Default
     private List<Category> categories = new ArrayList<>();
 
     /*

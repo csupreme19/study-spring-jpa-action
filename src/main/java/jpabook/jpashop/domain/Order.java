@@ -7,9 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -35,7 +37,8 @@ public class Order {
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = ALL)
-    private List<OrderItem> orderItems;
+    @Builder.Default
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "delivery_id")
@@ -52,8 +55,8 @@ public class Order {
     }
 
     public void addOrderItem(OrderItem orderItem) {
-        orderItems.add(orderItem);
         orderItem.changeOrder(this);
+        this.orderItems.add(orderItem);
     }
 
     public void changeDelivery(Delivery delivery) {
