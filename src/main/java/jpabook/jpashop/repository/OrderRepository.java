@@ -4,11 +4,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderSearch;
+import jpabook.jpashop.model.OrderSearch;
 import jpabook.jpashop.model.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -107,7 +106,7 @@ public class OrderRepository {
                 .from(order)
                 .join(order.member, member).fetchJoin()
                 .where(statusEq(orderSearch)
-                        , nameLike(orderSearch))
+                        , nameContains(orderSearch))
                 .limit(1000)
                 .fetch();
     }
@@ -118,11 +117,11 @@ public class OrderRepository {
 
     private BooleanExpression statusEq(OrderSearch orderSearch) {
         OrderStatus status = orderSearch.getOrderStatus();
-        return status == null ? null : order.status.eq(status);
+        return status != null ? order.status.eq(status) : null;
     }
 
-    private BooleanExpression nameLike(OrderSearch orderSearch) {
+    private BooleanExpression nameContains(OrderSearch orderSearch) {
         String name = orderSearch.getMemberName();
-        return hasText(name) ? member.name.like(name) : null;
+        return hasText(name) ? member.name.contains(name) : null;
     }
 }

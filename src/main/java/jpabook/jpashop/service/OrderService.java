@@ -2,6 +2,7 @@ package jpabook.jpashop.service;
 
 import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Item;
+import jpabook.jpashop.model.OrderSearch;
 import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.repository.OrderRepository;
@@ -57,7 +58,7 @@ public class OrderService {
 
     // 검색
     public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findOrders(orderSearch);
+        return orderRepository.findOrdersQuerydsl(orderSearch);
     }
 
 }
