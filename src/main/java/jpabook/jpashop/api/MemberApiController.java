@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +38,32 @@ public class MemberApiController {
         memberService.update(id, request.getName());
         Member member = memberService.findMember(id);
         return new UpdateMemberResponse(member.getId(), member.getName());
+    }
+
+    @GetMapping("/api/v1/members")
+    public List<Member> membersV1() {
+        return memberService.findMembers();
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result membersV2() {
+        List<Member> members = memberService.findMembers();
+        List<MemberDto> list = members.stream().map(m -> new MemberDto(m.getId(), m.getName())).toList();
+        return new Result(list.size(), list);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private int count;
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto {
+        private Long id;
+        private String name;
     }
 
     @Data
