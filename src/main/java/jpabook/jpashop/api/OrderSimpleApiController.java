@@ -3,8 +3,10 @@ package jpabook.jpashop.api;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.model.OrderSearch;
+import jpabook.jpashop.model.OrderSimpleQueryDto;
 import jpabook.jpashop.model.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import java.util.List;
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
+
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
@@ -42,8 +46,13 @@ public class OrderSimpleApiController {
         return orders.stream().map(SimpleOrderDto::new).toList();
     }
 
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderSimpleQueryRepository.findOrderDtos();
+    }
+
     @Data
-    static class SimpleOrderDto {
+    public static class SimpleOrderDto {
 
         private Long orderId;
         private String name;
