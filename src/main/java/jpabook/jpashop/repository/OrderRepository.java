@@ -37,11 +37,20 @@ public class OrderRepository {
     }
 
     public List<Order> findOrders(OrderSearch orderSearch) {
-        return em.createQuery("select o from Order o join o.member m where m.name like :name and o.status = :status", Order.class)
-                .setParameter("name", orderSearch.getMemberName())
+        return em.createQuery("select o from Order o " +
+                        "join o.member m " +
+                        "where m.name like :name and o.status = :status", Order.class)
+                .setParameter("name", "%" + orderSearch.getMemberName() + "%")
                 .setParameter("status", orderSearch.getOrderStatus())
                 .setFirstResult(0)
                 .setMaxResults(1000)
+                .getResultList();
+    }
+
+    public List<Order> findOrdersFetchJoin(OrderSearch orderSearch) {
+        return em.createQuery("select o from Order o " +
+                        "join fetch o.member m " +
+                        "join fetch o.delivery d", Order.class)
                 .getResultList();
     }
 

@@ -22,7 +22,7 @@ public class OrderSimpleApiController {
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
-        List<Order> list = orderRepository.findOrdersQuerydsl(new OrderSearch());
+        List<Order> list = orderRepository.findAllByCriteria(new OrderSearch());
         for(Order order : list) {
             order.getMember().getName();    // 지연 로딩 활성화
             order.getDelivery().getAddress();   // 지연 로딩 활성화
@@ -32,7 +32,13 @@ public class OrderSimpleApiController {
 
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
-        List<Order> orders = orderRepository.findOrdersQuerydsl(new OrderSearch());
+        List<Order> orders = orderRepository.findAllByCriteria(new OrderSearch());
+        return orders.stream().map(SimpleOrderDto::new).toList();
+    }
+
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findOrdersFetchJoin(new OrderSearch());
         return orders.stream().map(SimpleOrderDto::new).toList();
     }
 
