@@ -3,12 +3,14 @@ package jpabook.jpashop;
 import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Book;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 
+@Profile("!test")
 @Component
 @RequiredArgsConstructor
 public class InitDb {

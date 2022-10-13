@@ -1,11 +1,15 @@
 package jpabook.jpashop.service;
 
+import jpabook.jpashop.domain.AccessLog;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.exception.MemberDuplicateException;
+import jpabook.jpashop.model.AccessType;
+import jpabook.jpashop.repository.AccessLogRepository;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestScope;
 
 import java.util.List;
 
@@ -15,6 +19,8 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+
+    private final AccessLogService accessLogService;
 
     // 회원 가입
     // 기본 트랜잭션을 readOnly로 두고 커밋이 필요한 트랜잭션만 선언
@@ -32,7 +38,15 @@ public class MemberService {
 
     // 회원 전체 검색
     public List<Member> findMembers() {
-        return memberRepository.findAll();
+        AccessLog accessLog = AccessLog.builder()
+                .accessType(AccessType.READ)
+                .apiCode("findMembers()")
+                .build();
+        accessLogService.log(accessLog);
+
+        List<Member> members = memberRepository.findAll();
+        if(members.isEmpty()) throw new IllegalStateException("회원이 존재하지 않습니다.");
+        return members;
     }
 
     // 회원 단일 검색

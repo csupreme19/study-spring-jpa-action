@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpabook.jpashop.model.DeliveryStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -24,6 +24,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "delivery")
     private Order order;
 
